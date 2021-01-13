@@ -33,21 +33,29 @@ public class LoginServlet extends HttpServlet {
         String password = getServletConfig().getInitParameter("password");
 
         String userRegEx = "(^[A-Z]{1}[a-z]{2,}$)";
+        String passwordRegEx = "(^(?=.*[0-9])(?=.*[A-Z])(?=.*[!@#&$]).{8,}$)";
 
         if(Pattern.matches(userRegEx, user)) {
-            if(userID.equals(user) && password.equals(pwd)) {
-                request.setAttribute("user", user);
-                request.getRequestDispatcher("LoginSuccess.jsp").forward(request, response);
-            } else {
+            if (Pattern.matches(passwordRegEx, pwd)) {
+                if(userID.equals(user) && password.equals(pwd)) {
+                    request.setAttribute("user", user);
+                    request.getRequestDispatcher("LoginSuccess.jsp").forward(request, response);
+                } else {
+                    RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.html");
+                    PrintWriter out = response.getWriter();
+                    out.println("<font color=red>Either user name or password is wrong.<font>");
+                    rd.include(request, response);
+                }
+            }else {
                 RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.html");
                 PrintWriter out = response.getWriter();
-                out.println("<font color=red>Either user name or password is wrong.<font>");
+                out.println("<font color=red>Password is not meeting the requirements.<font>");
                 rd.include(request, response);
             }
-        } else {
+        }else {
             RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.html");
             PrintWriter out = response.getWriter();
-            out.println("<font color=red>Invalid user name.<font>");
+            out.println("<font color=red>username is not meeting the requirements<font>");
             rd.include(request, response);
         }
     }
