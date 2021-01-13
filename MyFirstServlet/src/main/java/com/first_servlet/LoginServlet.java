@@ -12,6 +12,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+@WebServlet(
+        description = "Login Servlet Testing",
+        urlPatterns = {"/LoginServlet"},
+        initParams = {
+                @WebInitParam(name = "user", value = "murali"),
+                @WebInitParam(name = "password", value = "password")
+        }
+)
 
 public class LoginServlet extends HttpServlet {
     @Override
